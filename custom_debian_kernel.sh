@@ -198,6 +198,11 @@ extract
 configure
 build
 
+### ### ###
+echo ""
+printf "\033[1;32mcustom_debian_kernel finished.\033[0m\n"
+### ### ###
+
 ### ### ### PLITC // ### ### ###
 exit 0
 # EOF
