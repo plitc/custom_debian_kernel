@@ -133,7 +133,6 @@ else
 fi
 }
 
-
 GETLATESTVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "stable" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "stable" | sed 's/[^[0-9\.\-]]*//g')
 GETCPUCORES=$(nproc)
 
@@ -152,6 +151,9 @@ requirements() {
 
    (sudo apt-get install -y libncurses5-dev gcc make git exuberant-ctags bc libssl-dev) & spinner $!
    checkhard apt-get install the BUILD ENVIROMENT
+
+   (sudo apt-get install -y time curl) & spinner $!
+   checkhard apt-get install optional tools
 }
 
 download() {
