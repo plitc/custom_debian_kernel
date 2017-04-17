@@ -172,10 +172,10 @@ then
    (rm -rf /kernel-build/linux-"$GETLATESTVERSION") & spinner $!
    checkhard remove the old kernel directory
    (tar -xaf /kernel-build/linux-"$GETLATESTVERSION".tar.xz -C /kernel-build) & spinner $!
-   checkhard extracted the kernel source
+   checkhard extract the kernel source
 else
    (tar -xaf /kernel-build/linux-"$GETLATESTVERSION".tar.xz -C /kernel-build) & spinner $!
-   checkhard extracted the kernel source
+   checkhard extract the kernel source
 fi
 }
 
