@@ -183,7 +183,7 @@ build() {
    checkhard modify kernel config settings so that custom kernels will get modules signed by a one-time key
    cd /kernel-build/linux-"$GETLATESTVERSION" && time make -j"$GETCPUCORES" deb-pkg LOCALVERSION=-plitc KDEB_PKGVERSION=$(make kernelversion)-1
    checkhard kernel build
-   ls -allt /kernel-build/linux-"$GETLATESTVERSION" | grep "*.deb"
+   ls -allt /kernel-build | grep ".deb" | egrep -v "tar.gz" | head -n 5
 }
 
 #// RUN
