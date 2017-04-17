@@ -61,11 +61,6 @@ spinner() {
    printf "    \b\b\b\b"
 }
 
-#// FUNCTION: clean up tmp files (Version 1.0)
-cleanup() {
-   rm -rf /etc/lxc-to-go/tmp/*
-}
-
 #// FUNCTION: run script as root (Version 1.0)
 checkrootuser() {
 if [ "$(id -u)" != "0" ]; then
@@ -133,6 +128,7 @@ else
 fi
 }
 
+GETLATESTMAINVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "stable" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "stable" | sed 's/[^[0-9\.\-]]*//g' | tr '.' '\n' | head -n1)
 GETLATESTVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "stable" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "stable" | sed 's/[^[0-9\.\-]]*//g')
 GETCPUCORES=$(nproc)
 
@@ -161,7 +157,7 @@ if [ -e /kernel-build/linux-"$GETLATESTVERSION".tar.xz ]
 then
    : # dummy
 else
-   (curl -o /kernel-build/linux-"$GETLATESTVERSION".tar.xz https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-"$GETLATESTVERSION".tar.xz) & spinner $!
+   (curl -o /kernel-build/linux-"$GETLATESTVERSION".tar.xz https://cdn.kernel.org/pub/linux/kernel/v"$GETLATESTMAINVERSION".x/linux-"$GETLATESTVERSION".tar.xz) & spinner $!
    checksoft downloaded the kernel source package
 fi
 }
