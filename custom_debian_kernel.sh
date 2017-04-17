@@ -187,7 +187,7 @@ build() {
    #// https://lists.debian.org/debian-kernel/2016/04/msg00579.html
    (sed -i 's/.*CONFIG_SYSTEM_TRUSTED_KEYS.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' /kernel-build/linux-"$GETLATESTVERSION"/.config) & spinner $!
    checkhard modify kernel config settings so that custom kernels will get modules signed by a one-time key
-   cd /kernel-build/linux-"$GETLATESTVERSION" && time make -j"$GETCPUCORES" deb-pkg LOCALVERSION=-plitc KDEB_PKGVERSION=$(make kernelversion)-1
+   cd /kernel-build/linux-"$GETLATESTVERSION" && time make -j"$GETCPUCORES" deb-pkg LOCALVERSION=-custom KDEB_PKGVERSION=$(make kernelversion)-1
    checkhard kernel build
    ls -allt /kernel-build | grep ".deb" | egrep -v "tar.gz" | head -n 5
 }
