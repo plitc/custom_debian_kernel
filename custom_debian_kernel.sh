@@ -167,8 +167,14 @@ fi
 }
 
 extract() {
+if [ -e /kernel-build/linux-"$GETLATESTVERSION" ]
+then
+   (rm -rf /kernel-build/linux-"$GETLATESTVERSION") & spinner $!
+   checkhard remove the old kernel directory
+else
    (tar -xaf /kernel-build/linux-"$GETLATESTVERSION".tar.xz -C /kernel-build) & spinner $!
    checksoft extracted the kernel source
+fi
 }
 
 configure() {
@@ -201,6 +207,13 @@ build
 ### ### ###
 echo ""
 printf "\033[1;32mcustom_debian_kernel finished.\033[0m\n"
+echo ""
+echo "next steps:"
+echo "sudo dpkg -i /kernel-build/linux-headers-$GETLATESTVERSION.deb"
+echo "sudo dpkg -i /kernel-build/linux-image-$GETLATESTVERSION.deb"
+echo "sudo dpkg -i /kernel-build/linux-firmware-image-$GETLATESTVERSION.deb"
+echo "sudo update-grub"
+echo "reboot"
 ### ### ###
 
 ### ### ### PLITC // ### ### ###
