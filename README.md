@@ -1,3 +1,7 @@
+Requirement
+===========
+* ~ 20 GB free space
+
 Example
 =======
 ```
