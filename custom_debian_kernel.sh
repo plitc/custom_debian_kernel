@@ -134,7 +134,7 @@ GETCPUCORES=$(nproc)
 
 requirements() {
    (sudo mkdir -p /kernel-build) & spinner $!
-   checksoft mkdir /kernel-build
+   checkhard mkdir /kernel-build
 
    (sudo apt-get autoclean) & spinner $!
    checksoft apt-get autoclean
@@ -158,7 +158,7 @@ then
    : # dummy
 else
    (curl -o /kernel-build/linux-"$GETLATESTVERSION".tar.xz https://cdn.kernel.org/pub/linux/kernel/v"$GETLATESTMAINVERSION".x/linux-"$GETLATESTVERSION".tar.xz) & spinner $!
-   checksoft downloaded the kernel source package
+   checkhard downloaded the kernel source package
 fi
 }
 
@@ -177,7 +177,7 @@ fi
 
 configure() {
    (cp /boot/config-`uname -r`* /kernel-build/linux-"$GETLATESTVERSION"/.config) & spinner $!
-   checksoft copy the current kernel config
+   checkhard copy the current kernel config
 
    cd /kernel-build/linux-"$GETLATESTVERSION" && make menuconfig
    checkhard make menuconfig
