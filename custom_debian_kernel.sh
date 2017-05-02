@@ -128,10 +128,14 @@ else
 fi
 }
 
-GETLATESTMAINVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "stable" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "stable" | sed 's/[^[0-9\.\-]]*//g' | tr '.' '\n' | head -n1)
-GETLATESTVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "stable" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "stable" | sed 's/[^[0-9\.\-]]*//g')
-GETCPUCORES=$(nproc)
+#// FUNCTION:
+fetchinfo() {
+   GETLATESTMAINVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "$1" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "$1" | sed 's/[^[0-9\.\-]]*//g' | tr '.' '\n' | head -n1)
+   GETLATESTVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "$1" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "$1" | sed 's/[^[0-9\.\-]]*//g')
+   GETCPUCORES=$(nproc)
+}
 
+#// FUNCTION:
 requirements() {
    (sudo mkdir -p /kernel-build) & spinner $!
    checkhard mkdir /kernel-build
@@ -152,6 +156,7 @@ requirements() {
    checkhard apt-get install necessary tools
 }
 
+#// FUNCTION:
 download() {
 if [ -e /kernel-build/linux-"$GETLATESTVERSION".tar.xz ]
 then
@@ -162,6 +167,7 @@ else
 fi
 }
 
+#// FUNCTION:
 extract() {
 if [ -e /kernel-build/linux-"$GETLATESTVERSION" ]
 then
@@ -175,6 +181,7 @@ else
 fi
 }
 
+#// FUNCTION:
 configure() {
    (cp /boot/config-`uname -r`* /kernel-build/linux-"$GETLATESTVERSION"/.config) & spinner $!
    checkhard copy the current kernel config
@@ -183,6 +190,7 @@ configure() {
    checkhard make menuconfig
 }
 
+#// FUNCTION:
 build() {
    #// https://lists.debian.org/debian-kernel/2016/04/msg00579.html
    (sed -i 's/.*CONFIG_SYSTEM_TRUSTED_KEYS.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' /kernel-build/linux-"$GETLATESTVERSION"/.config) & spinner $!
@@ -192,27 +200,66 @@ build() {
    ls -allt /kernel-build | grep ".deb" | egrep -v "tar.gz" | head -n 5
 }
 
+#// FUNCTION:
+info() {
+   ### ### ###
+   echo ""
+   printf "\033[1;32mcustom_debian_kernel finished.\033[0m\n"
+   echo ""
+   echo "next steps:"
+   echo "sudo dpkg -i /kernel-build/linux-headers-$GETLATESTVERSION.deb"
+   echo "sudo dpkg -i /kernel-build/linux-image-$GETLATESTVERSION.deb"
+   echo "sudo dpkg -i /kernel-build/linux-firmware-image-$GETLATESTVERSION.deb"
+   echo "sudo update-grub"
+   echo "reboot"
+   ### ### ###
+}
+
 #// RUN
+
+### // stage0 ###
 
 checkdebiandistribution
 
+case "$1" in
+### ### ### ### ### ### ### ### ###
+'stable')
+### stage1 // ###
+
+fetchinfo stable
 requirements
 download
 extract
 configure
 build
+info
 
-### ### ###
-echo ""
-printf "\033[1;32mcustom_debian_kernel finished.\033[0m\n"
-echo ""
-echo "next steps:"
-echo "sudo dpkg -i /kernel-build/linux-headers-$GETLATESTVERSION.deb"
-echo "sudo dpkg -i /kernel-build/linux-image-$GETLATESTVERSION.deb"
-echo "sudo dpkg -i /kernel-build/linux-firmware-image-$GETLATESTVERSION.deb"
-echo "sudo update-grub"
-echo "reboot"
-### ### ###
+echo "" # dummy
+printf "\033[1;32mcuston_debian_kernel finished.\033[0m\n"
+### // stage1 ###
+   ;;
+'mainline')
+### stage1 // ###
+
+fetchinfo mainline
+requirements
+download
+extract
+configure
+build
+info
+
+echo "" # dummy
+printf "\033[1;32mcuston_debian_kernel finished.\033[0m\n"
+### // stage1 ###
+   ;;
+### ### ### ### ### ### ### ### ###
+*)
+printf "\033[1;31mWARNING: custom_debian_kernel is experimental and its not ready for production. Do it at your own risk.\033[0m\n"
+echo "" # usage
+echo "usage: $0 { stable | mainline }"
+;;
+esac
 
 ### ### ### PLITC // ### ### ###
 exit 0
