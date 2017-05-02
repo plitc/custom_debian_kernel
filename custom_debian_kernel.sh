@@ -207,9 +207,9 @@ info() {
    printf "\033[1;32mcustom_debian_kernel finished.\033[0m\n"
    echo ""
    echo "next steps:"
-   echo "sudo dpkg -i /kernel-build/linux-headers-$GETLATESTVERSION.deb"
-   echo "sudo dpkg -i /kernel-build/linux-image-$GETLATESTVERSION.deb"
-   echo "sudo dpkg -i /kernel-build/linux-firmware-image-$GETLATESTVERSION.deb"
+   echo "sudo dpkg -i /kernel-build/linux-headers-$GETLATESTVERSION-custom_$GETLATESTVERSION-1_amd64.deb"
+   echo "sudo dpkg -i /kernel-build/linux-image-$GETLATESTVERSION-custom_$GETLATESTVERSION-1_amd64.deb"
+   echo "sudo dpkg -i /kernel-build/linux-firmware-image-$GETLATESTVERSION-custom_$GETLATESTVERSION-1_amd64.deb"
    echo "sudo update-grub"
    echo "reboot"
    ### ### ###
