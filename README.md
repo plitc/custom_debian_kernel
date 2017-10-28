@@ -31,7 +31,8 @@ Example - create a SmartOS (8x Core Machine) LX-branded Zone for linux-kernel-bu
 ===================================================================================
 
 * require http://dsapid.root1.ass.de/ui/#!/configure/1c88885e-8b46-11e7-af26-8b92b4effc78
-* on SmartOS (Global Zone)
+
+* on the SmartOS (Global Zone)
 ```
 cat <<EOF > /root/vm01.linux-kernel-build.json
 {
@@ -57,7 +58,7 @@ cat <<EOF > /root/vm01.linux-kernel-build.json
   "nics": [
     {
       "nic_tag": "admin",
-      "ip": "10.1.1.100",
+      "ip": "10.1.1.99",
       "netmask": "255.255.255.0",
       "gateway": "10.1.1.1",
       "primary": true
@@ -67,6 +68,12 @@ cat <<EOF > /root/vm01.linux-kernel-build.json
 EOF
 
 vmadm create -f /root/vm01.linux-kernel-build.json
+```
+
+* on the Laptop
+```
+╭─daniel at it-daniel in /boot using
+╰─○ scp /boot/config-4.12.0-2-amd64 root@10.1.1.99:/zones/d5810180-3e51-ebfb-d93e-91d9e583e8f3/root/boot/config-4.10.0-0-amd64
 ```
 
 * the LX-branded Zone (Debian 9 Based)
