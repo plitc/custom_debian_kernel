@@ -135,9 +135,9 @@ check_environment() {
    then
       #// for SmartOS Environments
       echo "detect: LX-branded Zone..."
-      if [ -z "$(ls -A /boot)" ]
+      if [ -z "$(ls -A /boot | grep config-`uname -r`)" ]
       then
-         echo "[$(printf "\033[1;33mFAILED\033[0m\n")] /boot is empty, copy a kernel config before!"
+         echo "[$(printf "\033[1;33mFAILED\033[0m\n")] /boot is empty, copy a kernel config before! (the /boot/config-VERSION file must match the LX Brandz kernel string)"
          exit 1
       fi
    fi
