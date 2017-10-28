@@ -129,7 +129,7 @@ fi
 }
 
 #// FUNCTION:
-checkenvironment() {
+check_environment() {
    PLATFORM=$(uname -a | grep -c "BrandZ")
    if [ "$PLATFORM" = "1" ]
    then
@@ -241,6 +241,7 @@ case "$1" in
 'stable')
 ### stage1 // ###
 
+check_environment
 fetchinfo stable
 requirements
 download
@@ -256,6 +257,7 @@ printf "\033[1;32mcuston_debian_kernel finished.\033[0m\n"
 'mainline')
 ### stage1 // ###
 
+check_environment
 fetchinfo mainline
 requirements
 download
