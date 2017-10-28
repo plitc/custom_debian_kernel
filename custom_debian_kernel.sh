@@ -129,6 +129,21 @@ fi
 }
 
 #// FUNCTION:
+checkenvironment() {
+   PLATFORM=$(uname -a | grep -c "BrandZ")
+   if [ "$PLATFORM" = "1" ]
+   then
+      #// for SmartOS Environments
+      echo "detect: LX-branded Zone..."
+      if [ -z "$(ls -A /boot)" ]
+      then
+         echo "[$(printf "\033[1;33mFAILED\033[0m\n")] /boot is empty, copy a kernel config before!"
+         exit 1
+      fi
+   fi
+}
+
+#// FUNCTION:
 fetchinfo() {
    GETLATESTMAINVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "$1" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "$1" | sed 's/[^[0-9\.\-]]*//g' | tr '.' '\n' | head -n1)
    GETLATESTVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "$1" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "$1" | sed 's/[^[0-9\.\-]]*//g')
