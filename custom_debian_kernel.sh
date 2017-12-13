@@ -168,7 +168,7 @@ requirements() {
    checkhard apt-get install the BUILD ENVIROMENT
 
    #/(sudo apt-get install -y dpkg-dev time curl gnupg dirmngr gnupg-agent gnupg-l10n gnupg-utils gpg-wks-client gpg-wks-server gpgconf gpgsm gpgv gnupg2) & spinner $!
-   (sudo apt-get install -y dpkg-dev time curl gnupg dirmngr gnupg-agent gnupg-l10n gpgsm gpgv gnupg2 parcimonie) & spinner $!
+   (sudo apt-get install -y dpkg-dev time curl gnupg dirmngr gnupg-agent gnupg-l10n gpgsm gpgv gnupg2) & spinner $!
    checkhard apt-get install necessary tools
 }
 
