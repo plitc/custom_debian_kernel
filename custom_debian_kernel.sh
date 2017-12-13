@@ -144,7 +144,7 @@ check_environment() {
 }
 
 #// FUNCTION:
-fetchinfo() {
+fetch_info() {
    GETLATESTMAINVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "$1" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "$1" | sed 's/[^[0-9\.\-]]*//g' | tr '.' '\n' | head -n1)
    GETLATESTVERSION=$(curl -s https://www.kernel.org/feeds/kdist.xml | grep "$1" | grep "title" | sed 's/title/###/g' | head -n 1 | tr '###' '\n' | egrep "$1" | sed 's/[^[0-9\.\-]]*//g')
    GETCPUCORES=$(nproc)
@@ -167,7 +167,7 @@ requirements() {
    (sudo apt-get install -y libncurses5-dev gcc make git exuberant-ctags bc libssl-dev) & spinner $!
    checkhard apt-get install the BUILD ENVIROMENT
 
-   (sudo apt-get install -y dpkg-dev time curl) & spinner $!
+   (sudo apt-get install -y dpkg-dev time curl gpg) & spinner $!
    checkhard apt-get install necessary tools
 }
 
@@ -179,15 +179,44 @@ then
 else
    (curl -o /kernel-build/linux-"$GETLATESTVERSION".tar.xz https://cdn.kernel.org/pub/linux/kernel/v"$GETLATESTMAINVERSION".x/linux-"$GETLATESTVERSION".tar.xz) & spinner $!
    checkhard downloaded the kernel source package
+   (curl -o /kernel-build/linux-"$GETLATESTVERSION".tar.sign https://cdn.kernel.org/pub/linux/kernel/v"$GETLATESTMAINVERSION".x/linux-"$GETLATESTVERSION".tar.sign) & spinner $!
+   checkhard downloaded the kernel source package sign file
 fi
+}
+
+#// FUNCTION:
+pre_extract() {
+if [ -e /kernel-build/linux-"$GETLATESTVERSION" ]
+then
+   (rm -rf /kernel-build/linux-"$GETLATESTVERSION") & spinner $!
+   checkhard remove the old kernel directory
+   (unxz /kernel-build/linux-"$GETLATESTVERSION".tar.xz) & spinner $!
+   checkhard pre_extract the kernel source
+else
+   (unxz /kernel-build/linux-"$GETLATESTVERSION".tar.xz) & spinner $!
+   checkhard pre_extract the kernel source
+fi
+}
+
+#// FUNCTION:
+verify(){
+   gpg2 --verify /kernel-build/linux-"$GETLATESTVERSION".tar.sign
+   if [ $? -eq 2 ]
+   then
+      gpg2 --verify /kernel-build/linux-"$GETLATESTVERSION".tar.sign > /tmp/linux-"$GETLATESTVERSION".tar.sign.output 2>&1
+      GETKEYID=$(egrep "RSA|DSA" /tmp/linux-"$GETLATESTVERSION".tar.sign.output | tr ' ' '\n' | tail -n 1)
+      gpg2 --keyserver hkp://keys.gnupg.net --recv-keys "$GETKEYID"
+      checkhard import missing key
+   fi
+   #// check again
+   gpg2 --verify /kernel-build/linux-"$GETLATESTVERSION".tar.sign
+   checkhard verify the archive against the signature
 }
 
 #// FUNCTION:
 extract() {
 if [ -e /kernel-build/linux-"$GETLATESTVERSION" ]
 then
-   (rm -rf /kernel-build/linux-"$GETLATESTVERSION") & spinner $!
-   checkhard remove the old kernel directory
    (tar -xaf /kernel-build/linux-"$GETLATESTVERSION".tar.xz -C /kernel-build) & spinner $!
    checkhard extract the kernel source
 else
@@ -242,9 +271,11 @@ case "$1" in
 ### stage1 // ###
 
 check_environment
-fetchinfo stable
+fetch_info stable
 requirements
 download
+pre_extract
+verify
 extract
 configure
 build
@@ -258,9 +289,11 @@ printf "\033[1;32mcuston_debian_kernel finished.\033[0m\n"
 ### stage1 // ###
 
 check_environment
-fetchinfo mainline
+fetch_info mainline
 requirements
 download
+pre_extract
+verify
 extract
 configure
 build
