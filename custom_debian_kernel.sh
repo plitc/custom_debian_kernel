@@ -167,7 +167,7 @@ requirements() {
    (sudo apt-get install -y libncurses5-dev gcc make git exuberant-ctags bc libssl-dev) & spinner $!
    checkhard apt-get install the BUILD ENVIROMENT
 
-   (sudo apt-get install -y dpkg-dev time curl gnupg2) & spinner $!
+   (sudo apt-get install -y dpkg-dev time curl gnupg2 dirmngr) & spinner $!
    checkhard apt-get install necessary tools
 }
 
