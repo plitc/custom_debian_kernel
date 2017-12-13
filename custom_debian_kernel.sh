@@ -167,7 +167,7 @@ requirements() {
    (sudo apt-get install -y libncurses5-dev gcc make git exuberant-ctags bc libssl-dev) & spinner $!
    checkhard apt-get install the BUILD ENVIROMENT
 
-   (sudo apt-get install -y dpkg-dev time curl gpg) & spinner $!
+   (sudo apt-get install -y dpkg-dev time curl gnupg2) & spinner $!
    checkhard apt-get install necessary tools
 }
 
@@ -247,8 +247,6 @@ build() {
 #// FUNCTION:
 info() {
    ### ### ###
-   echo ""
-   printf "\033[1;32mcustom_debian_kernel finished.\033[0m\n"
    echo ""
    echo "next steps:"
    echo "sudo dpkg -i /kernel-build/linux-headers-$GETLATESTVERSION-custom_$GETLATESTVERSION-1_amd64.deb"
