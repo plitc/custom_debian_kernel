@@ -164,7 +164,7 @@ requirements() {
    (sudo apt-get update) & spinner $!
    checksoft apt-get update
 
-   (sudo apt-get install -y libncurses5-dev gcc make git exuberant-ctags bc libssl-dev) & spinner $!
+   (sudo apt-get install -y libncurses5-dev gcc make git exuberant-ctags bc libssl-dev libelf-dev) & spinner $!
    checkhard apt-get install the BUILD ENVIROMENT
 
    #/(sudo apt-get install -y dpkg-dev time curl gnupg dirmngr gnupg-agent gnupg-l10n gnupg-utils gpg-wks-client gpg-wks-server gpgconf gpgsm gpgv gnupg2) & spinner $!
@@ -174,9 +174,9 @@ requirements() {
 
 #// FUNCTION:
 download() {
-if [ -e /kernel-build/linux-"$GETLATESTVERSION".tar.xz ]
+if [ -e /kernel-build/linux-$GETLATESTVERSION.tar.xz ]
 then
-   : # dummy
+   echo "... skip downloading ..."
 else
    (curl -o /kernel-build/linux-"$GETLATESTVERSION".tar.xz https://cdn.kernel.org/pub/linux/kernel/v"$GETLATESTMAINVERSION".x/linux-"$GETLATESTVERSION".tar.xz) & spinner $!
    checkhard downloaded the kernel source package
