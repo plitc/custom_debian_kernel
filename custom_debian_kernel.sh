@@ -219,10 +219,10 @@ verify(){
 extract() {
 if [ -e /kernel-build/linux-"$GETLATESTVERSION" ]
 then
-   (tar -xaf /kernel-build/linux-"$GETLATESTVERSION".tar.xz -C /kernel-build) & spinner $!
+   (tar -xaf /kernel-build/linux-"$GETLATESTVERSION".tar -C /kernel-build) & spinner $!
    checkhard extract the kernel source
 else
-   (tar -xaf /kernel-build/linux-"$GETLATESTVERSION".tar.xz -C /kernel-build) & spinner $!
+   (tar -xaf /kernel-build/linux-"$GETLATESTVERSION".tar -C /kernel-build) & spinner $!
    checkhard extract the kernel source
 fi
 }
