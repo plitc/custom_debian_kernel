@@ -206,7 +206,8 @@ verify(){
    then
       gpg2 --verify /kernel-build/linux-"$GETLATESTVERSION".tar.sign > /tmp/linux-"$GETLATESTVERSION".tar.sign.output 2>&1
       GETKEYID=$(egrep "RSA|DSA" /tmp/linux-"$GETLATESTVERSION".tar.sign.output | tr ' ' '\n' | tail -n 1)
-      gpg2 --keyserver hkp://keys.gnupg.net --recv-keys "$GETKEYID"
+      #/gpg2 --keyserver hkp://keys.gnupg.net --recv-keys "$GETKEYID"
+      gpg2 --recv-keys "$GETKEYID"
       checkhard import missing key
    fi
    #// check again
